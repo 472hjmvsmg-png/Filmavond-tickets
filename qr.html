@@ -6,7 +6,7 @@
     <title>Filmavond QR Codes</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
         body {
@@ -20,18 +20,23 @@
             text-align: center;
         }
 
+        #status {
+            text-align: center;
+            margin: 20px;
+        }
+
         #tickets {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
-            margin: 30px auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
         }
 
         .ticket {
             background: white;
             border-radius: 15px;
             padding: 25px;
+            width: 260px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
@@ -41,20 +46,14 @@
         }
 
         .qr {
-            margin: 20px auto;
             display: flex;
             justify-content: center;
-        }
-
-        .url {
-            font-size: 11px;
-            color: #777;
-            word-break: break-all;
+            margin: 20px 0;
         }
 
         .error {
             color: red;
-            text-align: center;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -63,42 +62,52 @@
 
     <h1>🎬 Filmavond QR Codes</h1>
 
-    <div id="tickets">
-        Laden...
-    </div>
+    <div id="status">Tickets laden...</div>
+
+    <div id="tickets"></div>
 
     <script>
-    const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co/";
+
+const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co/";
     const SUPABASE_KEY = "sb_publishable_5s3medx06EcIGSfqZAsvfA_BjQBYvDS";
+
+        const websiteURL = "https://472hjmvsmg-png.github.io/Filmavond-tickets/";
 
         const supabaseClient = supabase.createClient(
             SUPABASE_URL,
             SUPABASE_KEY
         );
 
-        const websiteURL = "https://472hjmvsmg-png.github.io/Filmavond-tickets/";
-
         async function loadTickets() {
 
+            const status = document.getElementById("status");
             const container = document.getElementById("tickets");
 
             const { data: tickets, error } = await supabaseClient
                 .from("tickets")
-                .select("name, token")
+                .select("id, name, token")
                 .order("id", { ascending: true });
 
             if (error) {
-                container.innerHTML =
-                    `<p class="error">Fout bij laden: ${error.message}</p>`;
+                status.innerHTML =
+                    '<span class="error">Fout: ' + error.message + '</span>';
                 return;
             }
 
-            container.innerHTML = "";
+            if (!tickets || tickets.length === 0) {
+                status.innerHTML = "Geen tickets gevonden.";
+                return;
+            }
 
-            tickets.forEach(ticket => {
+            status.innerHTML = tickets.length + " ticket gevonden.";
+
+            tickets.forEach(function(ticket) {
 
                 const ticketDiv = document.createElement("div");
                 ticketDiv.className = "ticket";
+
+                const title = document.createElement("h2");
+                title.textContent = ticket.name;
 
                 const qrDiv = document.createElement("div");
                 qrDiv.className = "qr";
@@ -106,27 +115,21 @@
                 const ticketURL =
                     websiteURL + "?token=" + encodeURIComponent(ticket.token);
 
+                ticketDiv.appendChild(title);
+                ticketDiv.appendChild(qrDiv);
+
+                container.appendChild(ticketDiv);
+
                 new QRCode(qrDiv, {
                     text: ticketURL,
                     width: 200,
                     height: 200
                 });
-
-                ticketDiv.innerHTML = `
-                    <h2>${ticket.name}</h2>
-                `;
-
-                ticketDiv.appendChild(qrDiv);
-
-                ticketDiv.innerHTML += `
-                    <div class="url">${ticketURL}</div>
-                `;
-
-                container.appendChild(ticketDiv);
             });
         }
 
         loadTickets();
+
     </script>
 
 </body>
