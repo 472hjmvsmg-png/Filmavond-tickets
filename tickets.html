@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filmavond Tickets</title>
+    <title>Filmavond Passes</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -15,8 +15,9 @@
 
         body {
             margin: 0;
-            background: #e9e9e9;
-            font-family: Arial, sans-serif;
+            background: #111;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #111;
         }
 
         .controls {
@@ -24,116 +25,168 @@
             top: 0;
             z-index: 100;
             background: #111;
-            padding: 15px;
+            padding: 18px;
             text-align: center;
+            border-bottom: 1px solid #333;
         }
 
-        button {
-            background: white;
+        .print-button {
             border: none;
+            background: #e50914;
+            color: white;
+            padding: 13px 25px;
             border-radius: 8px;
-            padding: 12px 22px;
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 15px;
+            font-weight: 700;
             cursor: pointer;
         }
 
         #tickets {
-            padding: 30px;
+            padding: 40px 20px;
         }
 
-        .ticket {
-            width: 800px;
+        .pass {
+            width: 900px;
             max-width: 100%;
-            margin: 0 auto 30px auto;
-            background: white;
+            min-height: 340px;
+            margin: 0 auto 35px auto;
+
+            display: flex;
+
+            background: #f7f4ee;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            display: flex;
-            min-height: 320px;
+
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
         }
 
-        .ticket-main {
+        .pass-main {
             flex: 1;
-            padding: 35px;
+            padding: 42px;
             position: relative;
         }
 
-        .ticket-side {
-            width: 260px;
-            border-left: 2px dashed #bbb;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 25px;
-        }
-
-        .label {
+        .brand {
             font-size: 13px;
-            letter-spacing: 2px;
-            color: #777;
-            font-weight: bold;
-            margin-bottom: 8px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: #e50914;
+            margin-bottom: 50px;
         }
 
-        .title {
-            font-size: 34px;
+        .pass-label {
+            font-size: 11px;
             font-weight: 800;
-            margin-bottom: 25px;
+            letter-spacing: 2px;
+            color: #888;
+            margin-bottom: 9px;
+        }
+
+        .pass-title {
+            font-size: 44px;
+            line-height: 1;
+            font-weight: 900;
+            margin-bottom: 38px;
+            letter-spacing: -1px;
+        }
+
+        .name-label {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #888;
+            margin-bottom: 6px;
         }
 
         .name {
-            font-size: 25px;
-            font-weight: bold;
-            margin-bottom: 25px;
+            font-size: 30px;
+            font-weight: 800;
+            margin-bottom: 35px;
         }
 
-        .details {
-            display: flex;
-            gap: 40px;
-            flex-wrap: wrap;
-        }
-
-        .detail strong {
-            display: block;
-            font-size: 21px;
-        }
-
-        .message {
-            margin-top: 25px;
-            color: #555;
-        }
-
-        .valid {
+        .permanent {
             display: inline-block;
-            margin-top: 25px;
-            padding: 8px 13px;
-            border-radius: 20px;
+            padding: 9px 13px;
+            border: 1px solid #111;
+            border-radius: 50px;
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+        }
+
+        .divider {
+            width: 1px;
+            border-left: 2px dashed #b8b3aa;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            position: absolute;
+            width: 28px;
+            height: 28px;
             background: #111;
-            color: white;
-            font-size: 13px;
-            font-weight: bold;
+            border-radius: 50%;
+            left: -15px;
+        }
+
+        .divider::before {
+            top: -14px;
+        }
+
+        .divider::after {
+            bottom: -14px;
+        }
+
+        .pass-side {
+            width: 250px;
+            background: #ebe7df;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px;
         }
 
         .qr {
-            margin-bottom: 12px;
+            background: white;
+            padding: 11px;
+            border-radius: 11px;
+            margin-bottom: 18px;
         }
 
-        .scan {
-            font-size: 12px;
-            color: #666;
+        .scan-title {
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
             text-align: center;
+            margin-bottom: 7px;
+        }
+
+        .scan-text {
+            max-width: 175px;
+            text-align: center;
+            color: #777;
+            font-size: 10px;
+            line-height: 1.45;
         }
 
         .error {
+            color: #ff5555;
             text-align: center;
-            color: red;
-            padding: 40px;
+            padding: 50px;
         }
 
         @media print {
+
+            @page {
+                size: A4;
+                margin: 10mm;
+            }
+
             body {
                 background: white;
             }
@@ -146,11 +199,33 @@
                 padding: 0;
             }
 
-            .ticket {
+            .pass {
+                width: 100%;
+                max-width: none;
+                margin: 0 auto 12mm auto;
                 box-shadow: none;
-                margin: 0 auto 15mm auto;
+
                 break-inside: avoid;
                 page-break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .pass {
+                flex-direction: column;
+            }
+
+            .divider {
+                display: none;
+            }
+
+            .pass-side {
+                width: 100%;
+            }
+
+            .pass-title {
+                font-size: 36px;
             }
         }
     </style>
@@ -159,7 +234,9 @@
 <body>
 
     <div class="controls">
-        <button onclick="window.print()">🖨️ Print alle tickets</button>
+        <button class="print-button" onclick="window.print()">
+            🖨 Print alle Filmavond Passes
+        </button>
     </div>
 
     <div id="tickets">
@@ -182,29 +259,15 @@ const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co/";
 
             const container = document.getElementById("tickets");
 
-            const { data: tickets, error: ticketsError } =
+            const { data: tickets, error } =
                 await supabaseClient
                     .from("tickets")
                     .select("id, name, token")
                     .order("id", { ascending: true });
 
-            if (ticketsError) {
+            if (error) {
                 container.innerHTML =
-                    `<div class="error">Fout bij laden van tickets: ${ticketsError.message}</div>`;
-                return;
-            }
-
-            const { data: event, error: eventError } =
-                await supabaseClient
-                    .from("event_settings")
-                    .select("*")
-                    .order("id", { ascending: false })
-                    .limit(1)
-                    .single();
-
-            if (eventError) {
-                container.innerHTML =
-                    `<div class="error">Fout bij laden van filmavond: ${eventError.message}</div>`;
+                    `<div class="error">Fout bij laden: ${error.message}</div>`;
                 return;
             }
 
@@ -213,71 +276,76 @@ const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co/";
             tickets.forEach(function(ticket) {
 
                 const ticketURL =
-                    websiteURL + "?token=" + encodeURIComponent(ticket.token);
+                    websiteURL + "?token=" +
+                    encodeURIComponent(ticket.token);
 
-                const ticketDiv = document.createElement("div");
-                ticketDiv.className = "ticket";
+                const pass = document.createElement("div");
+                pass.className = "pass";
 
                 const main = document.createElement("div");
-                main.className = "ticket-main";
+                main.className = "pass-main";
 
                 main.innerHTML = `
-                    <div class="label">🎬 FILMAVOND</div>
-
-                    <div class="title">
-                        ${event.movie_title || "Filmavond"}
+                    <div class="brand">
+                        🎬 FILMAVOND
                     </div>
 
-                    <div class="label">PERSOONLIJK TICKET</div>
+                    <div class="pass-label">
+                        OFFICIËLE PERSOONLIJKE TOEGANG
+                    </div>
+
+                    <div class="pass-title">
+                        FILMAVOND<br>
+                        PASS
+                    </div>
+
+                    <div class="name-label">
+                        OP NAAM VAN
+                    </div>
 
                     <div class="name">
                         ${ticket.name}
                     </div>
 
-                    <div class="details">
-                        <div class="detail">
-                            <div class="label">DATUM</div>
-                            <strong>${event.event_date || "-"}</strong>
-                        </div>
-
-                        <div class="detail">
-                            <div class="label">TIJD</div>
-                            <strong>${event.event_time || "-"}</strong>
-                        </div>
-                    </div>
-
-                    <div class="message">
-                        ${event.message || ""}
-                    </div>
-
-                    <div class="valid">
-                        ✓ TICKET GELDIG
+                    <div class="permanent">
+                        ✓ PERMANENTE TOEGANG
                     </div>
                 `;
 
-                const side = document.createElement("div");
-                side.className = "ticket-side";
+                const divider = document.createElement("div");
+                divider.className = "divider";
 
-                const qrDiv = document.createElement("div");
-                qrDiv.className = "qr";
+                const side = document.createElement("div");
+                side.className = "pass-side";
+
+                const qr = document.createElement("div");
+                qr.className = "qr";
+
+                new QRCode(qr, {
+                    text: ticketURL,
+                    width: 170,
+                    height: 170,
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                const scanTitle = document.createElement("div");
+                scanTitle.className = "scan-title";
+                scanTitle.textContent = "SCAN VOOR DE ACTUELE FILMAVOND";
 
                 const scanText = document.createElement("div");
-                scanText.className = "scan";
-                scanText.textContent = "Scan voor jouw persoonlijke ticket";
+                scanText.className = "scan-text";
+                scanText.textContent =
+                    "Gebruik deze persoonlijke QR-code om de actuele film, datum en tijd te bekijken.";
 
-                side.appendChild(qrDiv);
+                side.appendChild(qr);
+                side.appendChild(scanTitle);
                 side.appendChild(scanText);
 
-                ticketDiv.appendChild(main);
-                ticketDiv.appendChild(side);
+                pass.appendChild(main);
+                pass.appendChild(divider);
+                pass.appendChild(side);
 
-                container.appendChild(ticketDiv);
-
-                new QRCode(qrDiv, {
-                    text: ticketURL,
-                    width: 180,
-                    height: 180
-                });
+                container.appendChild(pass);
             });
         }
 
