@@ -6,6 +6,8 @@
 
     <title>Filmavond Ticket</title>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
         body {
             margin: 0;
@@ -41,6 +43,10 @@
         .message {
             color: #aaa;
         }
+
+        .error {
+            color: #ff6b6b;
+        }
     </style>
 </head>
 
@@ -55,25 +61,86 @@
     </div>
 
     <script>
+
+        // ==========================================
+        // JOUW SUPABASE GEGEVENS
+        // ==========================================
+
+        const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co/rest/v1/";
+        const SUPABASE_KEY = "sb_publishable_5s3medx06EcIGSfqZAsvfA_BjQBYvDS";
+
+        // ==========================================
+        // SUPABASE VERBINDING
+        // ==========================================
+
+        const supabaseClient = supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+        // ==========================================
+        // TOKEN UIT DE URL HALEN
+        // ==========================================
+
         const params = new URLSearchParams(window.location.search);
         const token = params.get("token");
 
         const content = document.getElementById("content");
 
+        // ==========================================
+        // CONTROLEREN OF ER EEN TOKEN IS
+        // ==========================================
+
         if (!token) {
+
             content.innerHTML = `
-                <p class="message">
+                <p class="error">
                     Geen geldige ticketcode gevonden.
                 </p>
             `;
+
         } else {
+
+            loadTicket();
+
+        }
+
+        // ==========================================
+        // TICKET UIT SUPABASE OPHALEN
+        // ==========================================
+
+        async function loadTicket() {
+
+            const { data, error } = await supabaseClient
+                .from("tickets")
+                .select("*")
+                .eq("token", token)
+                .single();
+
+            if (error) {
+
+                console.error(error);
+
+                content.innerHTML = `
+                    <p class="error">
+                        Dit ticket bestaat niet of kon niet worden geladen.
+                    </p>
+                `;
+
+                return;
+            }
+
             content.innerHTML = `
-                <div class="name">Ticket gevonden!</div>
+                <div class="name">
+                    ${data.name}
+                </div>
+
                 <p class="message">
-                    We gaan je ticketgegevens ophalen...
+                    Welkom bij de filmavond! 🍿
                 </p>
             `;
         }
+
     </script>
 
 </body>
