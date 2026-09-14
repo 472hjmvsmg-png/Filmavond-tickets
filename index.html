@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Filmavond Ticket</title>
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #111;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        .ticket {
+            width: 90%;
+            max-width: 500px;
+            background: #222;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .name {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 25px 0;
+        }
+
+        .message {
+            color: #aaa;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ticket">
+        <h1>🎬 Filmavond</h1>
+
+        <div id="content">
+            Ticket wordt geladen...
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get("token");
+
+        const content = document.getElementById("content");
+
+        if (!token) {
+            content.innerHTML = `
+                <p class="message">
+                    Geen geldige ticketcode gevonden.
+                </p>
+            `;
+        } else {
+            content.innerHTML = `
+                <div class="name">Ticket gevonden!</div>
+                <p class="message">
+                    We gaan je ticketgegevens ophalen...
+                </p>
+            `;
+        }
+    </script>
+
+</body>
+</html>
