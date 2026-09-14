@@ -9,43 +9,153 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #111;
-            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #0b0b0b;
+            font-family: Arial, Helvetica, sans-serif;
             color: white;
         }
 
         .ticket {
-            width: 90%;
-            max-width: 500px;
-            background: #222;
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-            box-sizing: border-box;
+            width: 100%;
+            max-width: 420px;
+            background: #181818;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
-        h1 {
-            margin-top: 0;
+        .top {
+            padding: 35px 25px 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #242424, #111111);
+        }
+
+        .logo {
+            font-size: 42px;
+            margin-bottom: 8px;
+        }
+
+        .title {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            margin-top: 8px;
+            color: #aaa;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .content {
+            padding: 30px 25px;
+        }
+
+        .welcome {
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 8px;
         }
 
         .name {
-            font-size: 28px;
-            font-weight: bold;
-            margin: 25px 0;
+            text-align: center;
+            font-size: 30px;
+            font-weight: 800;
+            margin-bottom: 30px;
+        }
+
+        .movie {
+            text-align: center;
+            padding: 22px;
+            background: #242424;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .movie-label {
+            color: #999;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .movie-title {
+            font-size: 25px;
+            font-weight: 700;
+        }
+
+        .details {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .detail {
+            flex: 1;
+            background: #242424;
+            border-radius: 14px;
+            padding: 15px 8px;
+            text-align: center;
+        }
+
+        .detail-label {
+            display: block;
+            color: #999;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-weight: 700;
+            font-size: 14px;
         }
 
         .message {
-            color: #aaa;
+            text-align: center;
+            color: #bbb;
+            line-height: 1.5;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .status {
+            text-align: center;
+            padding: 13px;
+            border-radius: 12px;
+            background: #14351f;
+            color: #65d98b;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        .bottom {
+            border-top: 2px dashed #444;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 11px;
+            letter-spacing: 1px;
         }
 
         .error {
+            text-align: center;
             color: #ff6b6b;
+            padding: 40px 20px;
         }
     </style>
 </head>
@@ -53,33 +163,45 @@
 <body>
 
     <div class="ticket">
-        <h1>🎬 Filmavond</h1>
 
-        <div id="content">
-            Ticket wordt geladen...
+        <div class="top">
+            <div class="logo">🎬</div>
+            <div class="title">FILMAVOND</div>
+            <div class="subtitle">JOUW PERSOONLIJKE TICKET</div>
         </div>
+
+        <div class="content" id="content">
+
+            <div class="welcome">
+                Ticket wordt geladen...
+            </div>
+
+        </div>
+
+        <div class="bottom">
+            PERSOONLIJK TICKET • NIET DELEN
+        </div>
+
     </div>
+
 
     <script>
 
         // ==========================================
-        // JOUW SUPABASE GEGEVENS
+        // SUPABASE
         // ==========================================
 
         const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co";
         const SUPABASE_KEY = "sb_publishable_5s3medx06EcIGSfqZAsvfA_BjQBYvDS";
-
-        // ==========================================
-        // SUPABASE VERBINDING
-        // ==========================================
 
         const supabaseClient = supabase.createClient(
             SUPABASE_URL,
             SUPABASE_KEY
         );
 
+
         // ==========================================
-        // TOKEN UIT DE URL HALEN
+        // TOKEN UIT URL
         // ==========================================
 
         const params = new URLSearchParams(window.location.search);
@@ -87,16 +209,18 @@
 
         const content = document.getElementById("content");
 
+
         // ==========================================
-        // CONTROLEREN OF ER EEN TOKEN IS
+        // GEEN TOKEN
         // ==========================================
 
         if (!token) {
 
             content.innerHTML = `
-                <p class="error">
-                    Geen geldige ticketcode gevonden.
-                </p>
+                <div class="error">
+                    <h2>Geen geldig ticket</h2>
+                    <p>Gebruik de persoonlijke QR-code om je ticket te openen.</p>
+                </div>
             `;
 
         } else {
@@ -105,8 +229,9 @@
 
         }
 
+
         // ==========================================
-        // TICKET UIT SUPABASE OPHALEN
+        // TICKET LADEN
         // ==========================================
 
         async function loadTicket() {
@@ -117,31 +242,83 @@
                 .eq("token", token)
                 .single();
 
-     if (error) {
 
-    console.error(error);
+            if (error) {
 
-    content.innerHTML = `
-        <p class="error">
-            Er is een fout opgetreden:
-        </p>
-        <p>
-            ${error.message}
-        </p>
-    `;
+                console.error(error);
 
-    return;
-}
+                content.innerHTML = `
+                    <div class="error">
+                        <h2>Ticket niet gevonden</h2>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            // ======================================
+            // TICKET WEERGEVEN
+            // ======================================
 
             content.innerHTML = `
+
+                <div class="welcome">
+                    Welkom bij de filmavond
+                </div>
+
                 <div class="name">
                     ${data.name}
                 </div>
 
-                <p class="message">
-                    Welkom bij de filmavond! 🍿
-                </p>
+                <div class="movie">
+
+                    <div class="movie-label">
+                        Deze week
+                    </div>
+
+                    <div class="movie-title">
+                        Filmavond
+                    </div>
+
+                </div>
+
+                <div class="details">
+
+                    <div class="detail">
+                        <span class="detail-label">
+                            Datum
+                        </span>
+
+                        <span class="detail-value">
+                            Binnenkort
+                        </span>
+                    </div>
+
+                    <div class="detail">
+                        <span class="detail-label">
+                            Tijd
+                        </span>
+
+                        <span class="detail-value">
+                            20:00
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="message">
+                    Dit is jouw persoonlijke ticket.
+                    Laat deze pagina zien bij binnenkomst.
+                </div>
+
+                <div class="status">
+                    ✓ TICKET GELDIG
+                </div>
+
             `;
+
         }
 
     </script>
