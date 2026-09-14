@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Filmavond Ticket</title>
+    <title>Mijn Filmavond Ticket</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -16,350 +16,350 @@
         body {
             margin: 0;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background: #0b0b0b;
+
             font-family: Arial, Helvetica, sans-serif;
+
+            background:
+                radial-gradient(circle at top, #252525 0%, #101010 45%, #070707 100%);
+
             color: white;
         }
 
-        .ticket {
+        .page {
             width: 100%;
-            max-width: 420px;
-            background: #181818;
-            border-radius: 24px;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
+        }
+
+        .brand {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            color: #d6b36a;
+            margin: 10px 0 25px;
+        }
+
+        .ticket {
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,.5);
+
+            border: 1px solid rgba(214,179,106,0.35);
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #1b1b1b,
+                    #101010
+                );
+
+            box-shadow:
+                0 25px 60px rgba(0,0,0,0.45);
         }
 
-        .top {
-            padding: 35px 25px 30px;
-            text-align: center;
-            background: linear-gradient(135deg,#242424,#111);
+        .header {
+            padding: 26px 24px 20px;
         }
 
-        .logo {
-            font-size: 42px;
-            margin-bottom: 8px;
-        }
-
-        .title {
-            font-size: 30px;
+        .small-label {
+            font-size: 9px;
             font-weight: 800;
-            letter-spacing: 2px;
-        }
-
-        .subtitle {
-            margin-top: 8px;
-            color: #aaa;
-            font-size: 14px;
-            letter-spacing: 1px;
-        }
-
-        .content {
-            padding: 30px 25px;
-        }
-
-        .welcome {
-            text-align: center;
-            color: #999;
-            font-size: 14px;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.4);
             margin-bottom: 8px;
         }
 
         .name {
-            text-align: center;
-            font-size: 30px;
+            font-size: 29px;
             font-weight: 800;
-            margin-bottom: 30px;
+            margin-bottom: 4px;
         }
 
-        .movie {
-            text-align: center;
-            padding: 22px;
-            background: #242424;
+        .personal {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .poster-wrapper {
+            padding: 0 18px;
+        }
+
+        .poster {
+            width: 100%;
+            display: block;
+
             border-radius: 16px;
-            margin-bottom: 20px;
+
+            max-height: 560px;
+            object-fit: cover;
+
+            box-shadow:
+                0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        .movie-info {
+            padding: 25px 24px 30px;
         }
 
         .movie-label {
-            color: #999;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: #d6b36a;
+            margin-bottom: 9px;
         }
 
         .movie-title {
-            font-size: 25px;
-            font-weight: 700;
+            font-size: 31px;
+            line-height: 1.05;
+            font-weight: 900;
+            margin-bottom: 25px;
         }
 
         .details {
             display: flex;
-            gap: 10px;
+            gap: 35px;
             margin-bottom: 25px;
         }
 
-        .detail {
-            flex: 1;
-            background: #242424;
-            border-radius: 14px;
-            padding: 15px 8px;
-            text-align: center;
-        }
-
         .detail-label {
-            display: block;
-            color: #999;
-            font-size: 11px;
-            text-transform: uppercase;
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.38);
             margin-bottom: 5px;
         }
 
         .detail-value {
-            font-weight: 700;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: 800;
         }
 
         .message {
-            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+
             color: #bbb;
+            font-size: 13px;
             line-height: 1.5;
-            font-size: 14px;
-            margin-bottom: 25px;
         }
 
-        .status {
+        .valid {
+            margin-top: 25px;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 10px 14px;
+
+            border: 1px solid rgba(214,179,106,0.35);
+            border-radius: 999px;
+
+            color: #d6b36a;
+
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 1.7px;
+        }
+
+        .footer {
             text-align: center;
-            padding: 13px;
-            border-radius: 12px;
-            background: #14351f;
-            color: #65d98b;
+            margin-top: 18px;
+
+            color: rgba(255,255,255,0.25);
+
+            font-size: 8px;
             font-weight: 700;
-            font-size: 13px;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
 
         .error {
             text-align: center;
+            padding: 50px 20px;
             color: #ff6b6b;
-            padding: 30px 10px;
         }
 
-        .loading {
-            text-align: center;
-            color: #999;
-        }
+        @media (max-width: 380px) {
 
-        .bottom {
-            border-top: 2px dashed #444;
-            padding: 20px;
-            text-align: center;
-            color: #666;
-            font-size: 11px;
-            letter-spacing: 1px;
+            .movie-title {
+                font-size: 27px;
+            }
+
+            .name {
+                font-size: 25px;
+            }
+
+            .details {
+                gap: 25px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-<div class="ticket">
+    <div class="page">
 
-    <div class="top">
-        <div class="logo">🎬</div>
-        <div class="title">FILMAVOND</div>
-        <div class="subtitle">JOUW PERSOONLIJKE TICKET</div>
-    </div>
+        <div class="brand">
+            🎬 FILMAVOND
+        </div>
 
-    <div class="content" id="content">
+        <div id="ticket" class="ticket">
+            Laden...
+        </div>
 
-        <div class="loading">
-            Ticket wordt geladen...
+        <div class="footer">
+            PERSOONLIJK TICKET • NIET DELEN
         </div>
 
     </div>
 
-    <div class="bottom">
-        PERSOONLIJK TICKET • NIET DELEN
-    </div>
+    <script>
 
-</div>
-
-
-<script>
-
-    // ==========================================
-    // SUPABASE
-    // ==========================================
-
-    const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co/";
+        const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co/";
     const SUPABASE_KEY = "sb_publishable_5s3medx06EcIGSfqZAsvfA_BjQBYvDS";
 
-    const supabaseClient = supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+        const supabaseClient = supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
 
+        async function loadTicket() {
 
-    // ==========================================
-    // TOKEN
-    // ==========================================
+            const params = new URLSearchParams(window.location.search);
+            const token = params.get("token");
 
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
+            const ticketElement = document.getElementById("ticket");
 
-    const content = document.getElementById("content");
+            if (!token) {
+                ticketElement.innerHTML = `
+                    <div class="error">
+                        Geen geldig ticket gevonden.
+                    </div>
+                `;
+                return;
+            }
 
+            const { data: ticket, error: ticketError } =
+                await supabaseClient
+                    .from("tickets")
+                    .select("*")
+                    .eq("token", token)
+                    .single();
 
-    // ==========================================
-    // START
-    // ==========================================
+            if (ticketError || !ticket) {
+                ticketElement.innerHTML = `
+                    <div class="error">
+                        Ticket niet gevonden.
+                    </div>
+                `;
+                return;
+            }
 
-    if (!token) {
+            const { data: event, error: eventError } =
+                await supabaseClient
+                    .from("event_settings")
+                    .select("*")
+                    .order("id", { ascending: false })
+                    .limit(1)
+                    .single();
 
-        content.innerHTML = `
-            <div class="error">
-                <h2>Geen geldig ticket</h2>
-                <p>
-                    Gebruik de persoonlijke QR-code
-                    om je ticket te openen.
-                </p>
-            </div>
-        `;
+            if (eventError || !event) {
+                ticketElement.innerHTML = `
+                    <div class="error">
+                        Filmavond niet gevonden.
+                    </div>
+                `;
+                return;
+            }
 
-    } else {
+            ticketElement.innerHTML = `
+
+                <div class="header">
+
+                    <div class="small-label">
+                        PERSOONLIJK TICKET
+                    </div>
+
+                    <div class="name">
+                        ${ticket.name}
+                    </div>
+
+                    <div class="personal">
+                        Dit is jouw persoonlijke Filmavond Pass.
+                    </div>
+
+                </div>
+
+                <div class="poster-wrapper">
+
+                    <img
+                        class="poster"
+                        src="${event.poster_url || ""}"
+                        alt="${event.movie_title || "Filmavond"} poster"
+                        onerror="this.style.display='none';"
+                    >
+
+                </div>
+
+                <div class="movie-info">
+
+                    <div class="movie-label">
+                        DE ACTUELE FILMAVOND
+                    </div>
+
+                    <div class="movie-title">
+                        ${event.movie_title || "Filmavond"}
+                    </div>
+
+                    <div class="details">
+
+                        <div>
+                            <div class="detail-label">
+                                DATUM
+                            </div>
+
+                            <div class="detail-value">
+                                ${event.event_date || "-"}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="detail-label">
+                                AANVANG
+                            </div>
+
+                            <div class="detail-value">
+                                ${event.event_time || "-"}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    ${
+                        event.message
+                        ? `
+                        <div class="message">
+                            ${event.message}
+                        </div>
+                        `
+                        : ""
+                    }
+
+                    <div class="valid">
+                        ✓ TICKET GELDIG
+                    </div>
+
+                </div>
+
+            `;
+        }
 
         loadTicket();
 
-    }
-
-
-    // ==========================================
-    // TICKET + FILMAVOND LADEN
-    // ==========================================
-
-    async function loadTicket() {
-
-        // Persoon ophalen
-        const { data: ticket, error: ticketError } =
-            await supabaseClient
-                .from("tickets")
-                .select("*")
-                .eq("token", token)
-                .single();
-
-
-        if (ticketError) {
-
-            console.error(ticketError);
-
-            content.innerHTML = `
-                <div class="error">
-                    <h2>Ticket niet gevonden</h2>
-                    <p>${ticketError.message}</p>
-                </div>
-            `;
-
-            return;
-        }
-
-
-        // Filmavond ophalen
-        const { data: event, error: eventError } =
-            await supabaseClient
-                .from("event_settings")
-                .select("*")
-                .order("id", { ascending: false })
-                .limit(1)
-                .single();
-
-
-        if (eventError) {
-
-            console.error(eventError);
-
-            content.innerHTML = `
-                <div class="error">
-                    <h2>Filmavond niet gevonden</h2>
-                    <p>${eventError.message}</p>
-                </div>
-            `;
-
-            return;
-        }
-
-
-        // ======================================
-        // TICKET WEERGEVEN
-        // ======================================
-
-        content.innerHTML = `
-
-            <div class="welcome">
-                Welkom bij de filmavond
-            </div>
-
-            <div class="name">
-                ${ticket.name}
-            </div>
-
-            <div class="movie">
-
-                <div class="movie-label">
-                    Deze week
-                </div>
-
-                <div class="movie-title">
-                    ${event.movie_title}
-                </div>
-
-            </div>
-
-            <div class="details">
-
-                <div class="detail">
-
-                    <span class="detail-label">
-                        Datum
-                    </span>
-
-                    <span class="detail-value">
-                        ${event.event_date}
-                    </span>
-
-                </div>
-
-                <div class="detail">
-
-                    <span class="detail-label">
-                        Tijd
-                    </span>
-
-                    <span class="detail-value">
-                        ${event.event_time}
-                    </span>
-
-                </div>
-
-            </div>
-
-            <div class="message">
-                ${event.message}
-            </div>
-
-            <div class="status">
-                ✓ TICKET GELDIG
-            </div>
-
-        `;
-
-    }
-
-</script>
+    </script>
 
 </body>
 </html>
