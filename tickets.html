@@ -15,170 +15,339 @@
 
         body {
             margin: 0;
-            background: #111;
+            background:
+                radial-gradient(circle at top, #242424 0%, #111 42%, #080808 100%);
             font-family: Arial, Helvetica, sans-serif;
-            color: #111;
+            color: white;
         }
 
+        /* PRINT BUTTON */
         .controls {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: #111;
             padding: 18px;
             text-align: center;
-            border-bottom: 1px solid #333;
+            background: rgba(8, 8, 8, 0.94);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
 
         .print-button {
-            border: none;
-            background: #e50914;
-            color: white;
+            border: 0;
             padding: 13px 25px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 700;
+            border-radius: 999px;
+            background: #d6b36a;
+            color: #111;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
             cursor: pointer;
         }
 
-        #tickets {
-            padding: 40px 20px;
+        .print-button:hover {
+            background: #e4c47d;
         }
+
+        /* TICKETS CONTAINER */
+
+        #tickets {
+            padding: 60px 20px;
+        }
+
+        /* MAIN PASS */
 
         .pass {
-            width: 900px;
+            width: 920px;
             max-width: 100%;
-            min-height: 340px;
-            margin: 0 auto 35px auto;
+            min-height: 390px;
+            margin: 0 auto 42px;
 
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr 285px;
 
-            background: #f7f4ee;
-            border-radius: 20px;
+            position: relative;
             overflow: hidden;
 
-            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(214,179,106,0.45);
+            border-radius: 22px;
+
+            background:
+                radial-gradient(circle at 20% 20%, rgba(214,179,106,0.08), transparent 28%),
+                linear-gradient(145deg, #191919, #0e0e0e);
+
+            box-shadow:
+                0 25px 70px rgba(0,0,0,0.45),
+                inset 0 1px 0 rgba(255,255,255,0.04);
         }
 
+        /* DECORATIVE LIGHT */
+
+        .pass::before {
+            content: "";
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            right: 100px;
+            top: -320px;
+
+            border: 1px solid rgba(214,179,106,0.08);
+            box-shadow:
+                0 0 0 35px rgba(214,179,106,0.02),
+                0 0 0 70px rgba(214,179,106,0.015);
+
+            pointer-events: none;
+        }
+
+        /* LEFT SIDE */
+
         .pass-main {
-            flex: 1;
-            padding: 42px;
+            padding: 42px 48px;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
 
         .brand {
-            font-size: 13px;
+            color: #d6b36a;
+            font-size: 12px;
             font-weight: 900;
-            letter-spacing: 3px;
-            color: #e50914;
-            margin-bottom: 50px;
+            letter-spacing: 4px;
         }
 
-        .pass-label {
-            font-size: 11px;
-            font-weight: 800;
+        .small-number {
+            font-size: 9px;
+            color: rgba(255,255,255,0.35);
             letter-spacing: 2px;
-            color: #888;
-            margin-bottom: 9px;
+        }
+
+        .hero {
+            margin-top: 38px;
+        }
+
+        .eyebrow {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.43);
+            margin-bottom: 13px;
         }
 
         .pass-title {
-            font-size: 44px;
-            line-height: 1;
+            font-size: 56px;
+            line-height: 0.92;
             font-weight: 900;
-            margin-bottom: 38px;
-            letter-spacing: -1px;
+            letter-spacing: -2px;
+            margin: 0;
+        }
+
+        .pass-title span {
+            color: #d6b36a;
+        }
+
+        .name-block {
+            margin-top: 42px;
         }
 
         .name-label {
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 800;
-            letter-spacing: 2px;
-            color: #888;
-            margin-bottom: 6px;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.42);
+            margin-bottom: 8px;
         }
 
         .name {
             font-size: 30px;
+            line-height: 1;
             font-weight: 800;
-            margin-bottom: 35px;
+            letter-spacing: -0.5px;
+        }
+
+        .bottom {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-top: 35px;
         }
 
         .permanent {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
             padding: 9px 13px;
-            border: 1px solid #111;
-            border-radius: 50px;
+
+            border: 1px solid rgba(214,179,106,0.4);
+            border-radius: 999px;
+
+            color: #d6b36a;
             font-size: 9px;
             font-weight: 900;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.8px;
         }
 
+        .footer-text {
+            font-size: 8px;
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* DIVIDER */
+
         .divider {
+            position: absolute;
+            right: 285px;
+            top: 22px;
+            bottom: 22px;
             width: 1px;
-            border-left: 2px dashed #b8b3aa;
-            position: relative;
+            border-left: 1px dashed rgba(255,255,255,0.16);
         }
 
         .divider::before,
         .divider::after {
             content: "";
+
             position: absolute;
-            width: 28px;
-            height: 28px;
+            width: 25px;
+            height: 25px;
+
             background: #111;
+            border: 1px solid rgba(214,179,106,0.20);
             border-radius: 50%;
-            left: -15px;
+
+            left: -14px;
         }
 
         .divider::before {
-            top: -14px;
+            top: -13px;
         }
 
         .divider::after {
-            bottom: -14px;
+            bottom: -13px;
         }
 
+        /* QR SIDE */
+
         .pass-side {
-            width: 250px;
-            background: #ebe7df;
+            position: relative;
 
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
 
             padding: 30px;
+
+            background:
+                linear-gradient(
+                    160deg,
+                    #e7dcc2 0%,
+                    #d5c29a 100%
+                );
+
+            color: #111;
+        }
+
+        .qr-label {
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: 2.5px;
+            margin-bottom: 16px;
+            color: rgba(17,17,17,0.65);
         }
 
         .qr {
-            background: white;
-            padding: 11px;
-            border-radius: 11px;
-            margin-bottom: 18px;
+            padding: 13px;
+            background: #fff;
+            border-radius: 15px;
+
+            box-shadow:
+                0 10px 25px rgba(0,0,0,0.16);
+        }
+
+        .qr img {
+            display: block;
         }
 
         .scan-title {
-            font-size: 10px;
+            margin-top: 18px;
+
+            font-size: 12px;
             font-weight: 900;
-            letter-spacing: 1.5px;
             text-align: center;
-            margin-bottom: 7px;
+            letter-spacing: 1.3px;
         }
 
         .scan-text {
-            max-width: 175px;
+            max-width: 190px;
+            margin-top: 8px;
+
+            font-size: 9px;
+            line-height: 1.5;
             text-align: center;
-            color: #777;
-            font-size: 10px;
-            line-height: 1.45;
+
+            color: rgba(17,17,17,0.58);
+        }
+
+        .qr-footer {
+            position: absolute;
+            bottom: 19px;
+            left: 0;
+            right: 0;
+
+            text-align: center;
+
+            font-size: 7px;
+            font-weight: 900;
+            letter-spacing: 2px;
+
+            color: rgba(17,17,17,0.35);
         }
 
         .error {
-            color: #ff5555;
+            color: #ff6969;
             text-align: center;
             padding: 50px;
         }
+
+        /* MOBILE */
+
+        @media (max-width: 720px) {
+
+            .pass {
+                grid-template-columns: 1fr;
+            }
+
+            .divider {
+                display: none;
+            }
+
+            .pass-side {
+                min-height: 300px;
+            }
+
+            .pass-title {
+                font-size: 45px;
+            }
+
+            .bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 18px;
+            }
+        }
+
+        /* PRINT */
 
         @media print {
 
@@ -202,30 +371,18 @@
             .pass {
                 width: 100%;
                 max-width: none;
-                margin: 0 auto 12mm auto;
-                box-shadow: none;
+                min-height: 350px;
+
+                margin: 0 auto 12mm;
+
+                box-shadow:
+                    none;
 
                 break-inside: avoid;
                 page-break-inside: avoid;
-            }
-        }
 
-        @media (max-width: 700px) {
-
-            .pass {
-                flex-direction: column;
-            }
-
-            .divider {
-                display: none;
-            }
-
-            .pass-side {
-                width: 100%;
-            }
-
-            .pass-title {
-                font-size: 36px;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
         }
     </style>
@@ -286,29 +443,56 @@ const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co/";
                 main.className = "pass-main";
 
                 main.innerHTML = `
-                    <div class="brand">
-                        🎬 FILMAVOND
+                    <div>
+                        <div class="top">
+
+                            <div class="brand">
+                                FILMAVOND
+                            </div>
+
+                            <div class="small-number">
+                                PASS #${String(ticket.id).padStart(3, "0")}
+                            </div>
+
+                        </div>
+
+                        <div class="hero">
+
+                            <div class="eyebrow">
+                                PERSOONLIJKE TOEGANG
+                            </div>
+
+                            <h1 class="pass-title">
+                                FILMAVOND<br>
+                                <span>PASS</span>
+                            </h1>
+
+                        </div>
+
+                        <div class="name-block">
+
+                            <div class="name-label">
+                                UITGEREIKT AAN
+                            </div>
+
+                            <div class="name">
+                                ${ticket.name}
+                            </div>
+
+                        </div>
                     </div>
 
-                    <div class="pass-label">
-                        OFFICIËLE PERSOONLIJKE TOEGANG
-                    </div>
+                    <div class="bottom">
 
-                    <div class="pass-title">
-                        FILMAVOND<br>
-                        PASS
-                    </div>
+                        <div class="permanent">
+                            <span>✦</span>
+                            PERMANENTE PASS
+                        </div>
 
-                    <div class="name-label">
-                        OP NAAM VAN
-                    </div>
+                        <div class="footer-text">
+                            Persoonlijk • Niet delen
+                        </div>
 
-                    <div class="name">
-                        ${ticket.name}
-                    </div>
-
-                    <div class="permanent">
-                        ✓ PERMANENTE TOEGANG
                     </div>
                 `;
 
@@ -318,28 +502,39 @@ const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co/";
                 const side = document.createElement("div");
                 side.className = "pass-side";
 
+                const qrLabel = document.createElement("div");
+                qrLabel.className = "qr-label";
+                qrLabel.textContent = "JOUW PERSOONLIJKE QR";
+
                 const qr = document.createElement("div");
                 qr.className = "qr";
 
                 new QRCode(qr, {
                     text: ticketURL,
-                    width: 170,
-                    height: 170,
+                    width: 175,
+                    height: 175,
                     correctLevel: QRCode.CorrectLevel.H
                 });
 
                 const scanTitle = document.createElement("div");
                 scanTitle.className = "scan-title";
-                scanTitle.textContent = "SCAN VOOR DE ACTUELE FILMAVOND";
+                scanTitle.textContent =
+                    "SCAN VOOR DE ACTUELE FILMAVOND";
 
                 const scanText = document.createElement("div");
                 scanText.className = "scan-text";
                 scanText.textContent =
-                    "Gebruik deze persoonlijke QR-code om de actuele film, datum en tijd te bekijken.";
+                    "Bekijk de actuele film, datum, tijd en alle informatie online.";
 
+                const qrFooter = document.createElement("div");
+                qrFooter.className = "qr-footer";
+                qrFooter.textContent = "FILMAVOND • OFFICIËLE PASS";
+
+                side.appendChild(qrLabel);
                 side.appendChild(qr);
                 side.appendChild(scanTitle);
                 side.appendChild(scanText);
+                side.appendChild(qrFooter);
 
                 pass.appendChild(main);
                 pass.appendChild(divider);
