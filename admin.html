@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Filmavond Beheer</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top, #252525 0%, #101010 45%, #070707 100%);
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 40px 18px 60px;
+        }
+
+        .brand {
+            text-align: center;
+            color: #d6b36a;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 0 0 35px;
+            font-size: 34px;
+        }
+
+        .card {
+            background: #181818;
+            border: 1px solid rgba(214,179,106,0.25);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 17px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #aaa;
+            margin: 18px 0 8px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #3a3a3a;
+            border-radius: 10px;
+            background: #101010;
+            color: white;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #d6b36a;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .poster-preview {
+            width: 180px;
+            max-width: 100%;
+            border-radius: 12px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .file-input {
+            padding: 10px;
+            background: #101010;
+        }
+
+        button {
+            width: 100%;
+            border: 0;
+            border-radius: 11px;
+            padding: 14px 18px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .login-button,
+        .save-button {
+            background: #d6b36a;
+            color: #111;
+        }
+
+        .logout-button {
+            background: #292929;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .save-button {
+            margin-top: 25px;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .status.success {
+            display: block;
+            background: rgba(60, 150, 80, 0.15);
+            color: #78d98a;
+        }
+
+        .status.error {
+            display: block;
+            background: rgba(180, 50, 50, 0.15);
+            color: #ff8585;
+        }
+
+        #dashboard {
+            display: none;
+        }
+
+        #loginSection {
+            max-width: 450px;
+            margin: 70px auto;
+        }
+
+        .small-text {
+            color: #888;
+            font-size: 12px;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        .current-poster {
+            margin-top: 18px;
+        }
+
+        .current-poster img {
+            width: 160px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="brand">🎬 FILMAVOND</div>
+
+    <h1>Beheer</h1>
+
+    <!-- LOGIN -->
+
+    <div id="loginSection" class="card">
+
+        <h2>Inloggen</h2>
+
+        <label for="email">E-MAILADRES</label>
+        <input
+            id="email"
+            type="email"
+            placeholder="jouw e-mailadres"
+        >
+
+        <label for="password">WACHTWOORD</label>
+        <input
+            id="password"
+            type="password"
+            placeholder="jouw wachtwoord"
+        >
+
+        <button
+            class="login-button"
+            onclick="login()"
+            style="margin-top:20px;"
+        >
+            Inloggen
+        </button>
+
+        <div id="loginStatus" class="status"></div>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+
+    <div id="dashboard">
+
+        <div class="card">
+
+            <h2>Huidige filmavond</h2>
+
+            <label for="movieTitle">FILM</label>
+            <input
+                id="movieTitle"
+                type="text"
+                placeholder="Bijvoorbeeld Iron Man 2"
+            >
+
+            <label for="eventDate">DATUM</label>
+            <input
+                id="eventDate"
+                type="text"
+                placeholder="Bijvoorbeeld 20 september 2026"
+            >
+
+            <label for="eventTime">TIJD</label>
+            <input
+                id="eventTime"
+                type="text"
+                placeholder="Bijvoorbeeld 20:00"
+            >
+
+            <label for="message">BERICHT</label>
+            <textarea
+                id="message"
+                placeholder="Bijvoorbeeld Neem snacks mee! 🍿"
+            ></textarea>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Filmposter</h2>
+
+            <label for="posterFile">NIEUWE POSTER</label>
+
+            <input
+                id="posterFile"
+                class="file-input"
+                type="file"
+                accept="image/*"
+                onchange="previewPoster()"
+            >
+
+            <div class="small-text">
+                Kies een afbeelding van je computer. De poster wordt online opgeslagen.
+            </div>
+
+            <img
+                id="posterPreview"
+                class="poster-preview"
+                alt="Poster preview"
+            >
+
+            <div id="currentPoster" class="current-poster"></div>
+
+        </div>
+
+
+        <div class="card">
+
+            <button
+                class="save-button"
+                onclick="saveEvent()"
+            >
+                Opslaan
+            </button>
+
+            <div id="saveStatus" class="status"></div>
+
+            <button
+                class="logout-button"
+                onclick="logout()"
+            >
+                Uitloggen
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+   const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co/";
+    const SUPABASE_KEY = "sb_publishable_5s3medx06EcIGSfqZAsvfA_BjQBYvDS";
+
+    const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+    let currentEvent = null;
+
+
+    function showStatus(elementId, message, type) {
+
+        const element = document.getElementById(elementId);
+
+        element.textContent = message;
+        element.className = "status " + type;
+    }
+
+
+    async function login() {
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const password =
+            document.getElementById("password").value;
+
+        if (!email || !password) {
+
+            showStatus(
+                "loginStatus",
+                "Vul je e-mailadres en wachtwoord in.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        const { error } =
+            await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+
+        if (error) {
+
+            showStatus(
+                "loginStatus",
+                "Inloggen mislukt: " + error.message,
+                "error"
+            );
+
+            return;
+        }
+
+        showDashboard();
+    }
+
+
+    async function showDashboard() {
+
+        document.getElementById("loginSection").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+
+        await loadEvent();
+    }
+
+
+    async function loadEvent() {
+
+        const { data, error } =
+            await supabaseClient
+                .from("event_settings")
+                .select("*")
+                .order("id", { ascending: false })
+                .limit(1)
+                .single();
+
+
+        if (error) {
+
+            showStatus(
+                "saveStatus",
+                "Filmavond laden mislukt: " + error.message,
+                "error"
+            );
+
+            return;
+        }
+
+
+        currentEvent = data;
+
+
+        document.getElementById("movieTitle").value =
+            data.movie_title || "";
+
+        document.getElementById("eventDate").value =
+            data.event_date || "";
+
+        document.getElementById("eventTime").value =
+            data.event_time || "";
+
+        document.getElementById("message").value =
+            data.message || "";
+
+
+        showCurrentPoster(data.poster_url);
+    }
+
+
+    function showCurrentPoster(url) {
+
+        const container =
+            document.getElementById("currentPoster");
+
+        if (!url) {
+
+            container.innerHTML = "";
+
+            return;
+        }
+
+
+        container.innerHTML = `
+            <div class="small-text">
+                Huidige poster:
+            </div>
+
+            <img
+                src="${url}"
+                alt="Huidige poster"
+            >
+        `;
+    }
+
+
+    function previewPoster() {
+
+        const file =
+            document.getElementById("posterFile").files[0];
+
+        const preview =
+            document.getElementById("posterPreview");
+
+
+        if (!file) {
+
+            preview.style.display = "none";
+
+            return;
+        }
+
+
+        const reader = new FileReader();
+
+
+        reader.onload = function(event) {
+
+            preview.src = event.target.result;
+
+            preview.style.display = "block";
+        };
+
+
+        reader.readAsDataURL(file);
+    }
+
+
+    async function saveEvent() {
+
+        const saveButton =
+            document.querySelector(".save-button");
+
+        saveButton.disabled = true;
+
+        showStatus(
+            "saveStatus",
+            "Opslaan...",
+            "success"
+        );
+
+
+        try {
+
+            let posterUrl = currentEvent.poster_url || null;
+
+
+            const file =
+                document.getElementById("posterFile").files[0];
+
+
+            /*
+             * NIEUWE POSTER UPLOADEN
+             */
+
+            if (file) {
+
+                const extension =
+                    file.name.split(".").pop().toLowerCase();
+
+                const fileName =
+                    "poster-" + Date.now() + "." + extension;
+
+
+                const { error: uploadError } =
+                    await supabaseClient.storage
+                        .from("posters")
+                        .upload(fileName, file, {
+                            upsert: false
+                        });
+
+
+                if (uploadError) {
+                    throw uploadError;
+                }
+
+
+                const { data: publicUrlData } =
+                    supabaseClient.storage
+                        .from("posters")
+                        .getPublicUrl(fileName);
+
+
+                posterUrl =
+                    publicUrlData.publicUrl;
+            }
+
+
+            /*
+             * FILMAVOND OPSLAAN
+             */
+
+            const { error: updateError } =
+                await supabaseClient
+                    .from("event_settings")
+                    .update({
+                        movie_title:
+                            document.getElementById("movieTitle").value.trim(),
+
+                        event_date:
+                            document.getElementById("eventDate").value.trim(),
+
+                        event_time:
+                            document.getElementById("eventTime").value.trim(),
+
+                        message:
+                            document.getElementById("message").value.trim(),
+
+                        poster_url:
+                            posterUrl,
+
+                        updated_at:
+                            new Date().toISOString()
+                    })
+                    .eq("id", currentEvent.id);
+
+
+            if (updateError) {
+                throw updateError;
+            }
+
+
+            currentEvent.poster_url = posterUrl;
+
+            showCurrentPoster(posterUrl);
+
+
+            document.getElementById("posterFile").value = "";
+
+            document.getElementById("posterPreview").style.display =
+                "none";
+
+
+            showStatus(
+                "saveStatus",
+                "Filmavond succesvol opgeslagen! ✅",
+                "success"
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            showStatus(
+                "saveStatus",
+                "Opslaan mislukt: " + error.message,
+                "error"
+            );
+
+        } finally {
+
+            saveButton.disabled = false;
+        }
+    }
+
+
+    async function logout() {
+
+        await supabaseClient.auth.signOut();
+
+        document.getElementById("dashboard").style.display = "none";
+        document.getElementById("loginSection").style.display = "block";
+
+        document.getElementById("email").value = "";
+        document.getElementById("password").value = "";
+    }
+
+
+    async function checkLogin() {
+
+        const { data } =
+            await supabaseClient.auth.getSession();
+
+
+        if (data.session) {
+            showDashboard();
+        }
+    }
+
+
+    checkLogin();
+
+</script>
+
+</body>
+</html>
