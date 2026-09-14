@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filmavond Tickets</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #e9e9e9;
+            font-family: Arial, sans-serif;
+        }
+
+        .controls {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #111;
+            padding: 15px;
+            text-align: center;
+        }
+
+        button {
+            background: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 22px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #tickets {
+            padding: 30px;
+        }
+
+        .ticket {
+            width: 800px;
+            max-width: 100%;
+            margin: 0 auto 30px auto;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            display: flex;
+            min-height: 320px;
+        }
+
+        .ticket-main {
+            flex: 1;
+            padding: 35px;
+            position: relative;
+        }
+
+        .ticket-side {
+            width: 260px;
+            border-left: 2px dashed #bbb;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+        }
+
+        .label {
+            font-size: 13px;
+            letter-spacing: 2px;
+            color: #777;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .title {
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 25px;
+        }
+
+        .name {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .details {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .detail strong {
+            display: block;
+            font-size: 21px;
+        }
+
+        .message {
+            margin-top: 25px;
+            color: #555;
+        }
+
+        .valid {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 8px 13px;
+            border-radius: 20px;
+            background: #111;
+            color: white;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .qr {
+            margin-bottom: 12px;
+        }
+
+        .scan {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
+
+        .error {
+            text-align: center;
+            color: red;
+            padding: 40px;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .controls {
+                display: none;
+            }
+
+            #tickets {
+                padding: 0;
+            }
+
+            .ticket {
+                box-shadow: none;
+                margin: 0 auto 15mm auto;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="controls">
+        <button onclick="window.print()">🖨️ Print alle tickets</button>
+    </div>
+
+    <div id="tickets">
+        Laden...
+    </div>
+
+    <script>
+
+const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co/";
+    const SUPABASE_KEY = "sb_publishable_5s3medx06EcIGSfqZAsvfA_BjQBYvDS";
+
+        const websiteURL = "https://472hjmvsmg-png.github.io/Filmavond-tickets/";
+
+        const supabaseClient = supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+        async function loadTickets() {
+
+            const container = document.getElementById("tickets");
+
+            const { data: tickets, error: ticketsError } =
+                await supabaseClient
+                    .from("tickets")
+                    .select("id, name, token")
+                    .order("id", { ascending: true });
+
+            if (ticketsError) {
+                container.innerHTML =
+                    `<div class="error">Fout bij laden van tickets: ${ticketsError.message}</div>`;
+                return;
+            }
+
+            const { data: event, error: eventError } =
+                await supabaseClient
+                    .from("event_settings")
+                    .select("*")
+                    .order("id", { ascending: false })
+                    .limit(1)
+                    .single();
+
+            if (eventError) {
+                container.innerHTML =
+                    `<div class="error">Fout bij laden van filmavond: ${eventError.message}</div>`;
+                return;
+            }
+
+            container.innerHTML = "";
+
+            tickets.forEach(function(ticket) {
+
+                const ticketURL =
+                    websiteURL + "?token=" + encodeURIComponent(ticket.token);
+
+                const ticketDiv = document.createElement("div");
+                ticketDiv.className = "ticket";
+
+                const main = document.createElement("div");
+                main.className = "ticket-main";
+
+                main.innerHTML = `
+                    <div class="label">🎬 FILMAVOND</div>
+
+                    <div class="title">
+                        ${event.movie_title || "Filmavond"}
+                    </div>
+
+                    <div class="label">PERSOONLIJK TICKET</div>
+
+                    <div class="name">
+                        ${ticket.name}
+                    </div>
+
+                    <div class="details">
+                        <div class="detail">
+                            <div class="label">DATUM</div>
+                            <strong>${event.event_date || "-"}</strong>
+                        </div>
+
+                        <div class="detail">
+                            <div class="label">TIJD</div>
+                            <strong>${event.event_time || "-"}</strong>
+                        </div>
+                    </div>
+
+                    <div class="message">
+                        ${event.message || ""}
+                    </div>
+
+                    <div class="valid">
+                        ✓ TICKET GELDIG
+                    </div>
+                `;
+
+                const side = document.createElement("div");
+                side.className = "ticket-side";
+
+                const qrDiv = document.createElement("div");
+                qrDiv.className = "qr";
+
+                const scanText = document.createElement("div");
+                scanText.className = "scan";
+                scanText.textContent = "Scan voor jouw persoonlijke ticket";
+
+                side.appendChild(qrDiv);
+                side.appendChild(scanText);
+
+                ticketDiv.appendChild(main);
+                ticketDiv.appendChild(side);
+
+                container.appendChild(ticketDiv);
+
+                new QRCode(qrDiv, {
+                    text: ticketURL,
+                    width: 180,
+                    height: 180
+                });
+            });
+        }
+
+        loadTickets();
+
+    </script>
+
+</body>
+</html>
