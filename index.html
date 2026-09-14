@@ -117,18 +117,21 @@
                 .eq("token", token)
                 .single();
 
-            if (error) {
+     if (error) {
 
-                console.error(error);
+    console.error(error);
 
-                content.innerHTML = `
-                    <p class="error">
-                        Dit ticket bestaat niet of kon niet worden geladen.
-                    </p>
-                `;
+    content.innerHTML = `
+        <p class="error">
+            Er is een fout opgetreden:
+        </p>
+        <p>
+            ${error.message}
+        </p>
+    `;
 
-                return;
-            }
+    return;
+}
 
             content.innerHTML = `
                 <div class="name">
