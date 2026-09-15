@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Filmavond Passes</title>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -15,22 +16,19 @@
 
         body {
             margin: 0;
-            background:
-                radial-gradient(circle at top, #242424 0%, #111 42%, #080808 100%);
+            background: #111;
             font-family: Arial, Helvetica, sans-serif;
             color: white;
         }
 
-        /* PRINT BUTTON */
         .controls {
             position: sticky;
             top: 0;
             z-index: 100;
             padding: 18px;
             text-align: center;
-            background: rgba(8, 8, 8, 0.94);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: #090909;
+            border-bottom: 1px solid #2b2b2b;
         }
 
         .print-button {
@@ -41,112 +39,118 @@
             color: #111;
             font-size: 14px;
             font-weight: 800;
-            letter-spacing: 0.5px;
             cursor: pointer;
         }
 
         .print-button:hover {
-            background: #e4c47d;
+            background: #e3c27d;
         }
 
-        /* TICKETS CONTAINER */
-
-        #tickets {
-            padding: 60px 20px;
+        #printArea {
+            padding: 40px 20px;
         }
 
-        /* MAIN PASS */
+        /* Eén A4-pagina */
+        .sheet {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto 30px auto;
+            background: white;
 
-        .pass {
-            width: 920px;
-            max-width: 100%;
-            min-height: 390px;
-            margin: 0 auto 42px;
+            display: flex;
+            flex-direction: column;
+
+            overflow: hidden;
+        }
+
+        /* Eén helft van A4 */
+        .slot {
+            width: 100%;
+            height: 148.5mm;
+
+            padding: 8mm;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: relative;
+        }
+
+        /* =========================
+           VOORKANT
+           ========================= */
+
+        .front-pass {
+            width: 100%;
+            height: 100%;
 
             display: grid;
-            grid-template-columns: 1fr 285px;
+            grid-template-columns: 1fr 55mm;
 
             position: relative;
             overflow: hidden;
 
-            border: 1px solid rgba(214,179,106,0.45);
-            border-radius: 22px;
+            border-radius: 6mm;
 
             background:
-                radial-gradient(circle at 20% 20%, rgba(214,179,106,0.08), transparent 28%),
-                linear-gradient(145deg, #191919, #0e0e0e);
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(214,179,106,0.10),
+                    transparent 27%
+                ),
+                linear-gradient(
+                    145deg,
+                    #1b1b1b,
+                    #090909
+                );
 
-            box-shadow:
-                0 25px 70px rgba(0,0,0,0.45),
-                inset 0 1px 0 rgba(255,255,255,0.04);
+            border: 0.4mm solid rgba(214,179,106,0.5);
         }
 
-        /* DECORATIVE LIGHT */
+        .front-main {
+            padding: 11mm;
 
-        .pass::before {
-            content: "";
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            border-radius: 50%;
-            right: 100px;
-            top: -320px;
-
-            border: 1px solid rgba(214,179,106,0.08);
-            box-shadow:
-                0 0 0 35px rgba(214,179,106,0.02),
-                0 0 0 70px rgba(214,179,106,0.015);
-
-            pointer-events: none;
-        }
-
-        /* LEFT SIDE */
-
-        .pass-main {
-            padding: 42px 48px;
-            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        .top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
         .brand {
             color: #d6b36a;
-            font-size: 12px;
+            font-size: 3.2mm;
             font-weight: 900;
-            letter-spacing: 4px;
+            letter-spacing: 1.2mm;
         }
 
         .small-number {
-            font-size: 9px;
-            color: rgba(255,255,255,0.35);
-            letter-spacing: 2px;
-        }
+            position: absolute;
+            right: 60mm;
+            top: 10mm;
 
-        .hero {
-            margin-top: 38px;
+            color: rgba(255,255,255,0.3);
+            font-size: 2.3mm;
+            letter-spacing: 0.7mm;
         }
 
         .eyebrow {
-            font-size: 10px;
+            margin-top: 9mm;
+            margin-bottom: 3mm;
+
+            font-size: 2.5mm;
             font-weight: 800;
-            letter-spacing: 3px;
-            color: rgba(255,255,255,0.43);
-            margin-bottom: 13px;
+            letter-spacing: 0.8mm;
+
+            color: rgba(255,255,255,0.42);
         }
 
         .pass-title {
-            font-size: 56px;
-            line-height: 0.92;
-            font-weight: 900;
-            letter-spacing: -2px;
             margin: 0;
+
+            font-size: 12mm;
+            line-height: 0.9;
+            font-weight: 900;
+            letter-spacing: -0.5mm;
         }
 
         .pass-title span {
@@ -154,398 +158,709 @@
         }
 
         .name-block {
-            margin-top: 42px;
+            margin-top: 7mm;
         }
 
         .name-label {
-            font-size: 9px;
+            font-size: 2.3mm;
             font-weight: 800;
-            letter-spacing: 3px;
-            color: rgba(255,255,255,0.42);
-            margin-bottom: 8px;
+            letter-spacing: 0.8mm;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 1.5mm;
         }
 
         .name {
-            font-size: 30px;
+            font-size: 7mm;
             line-height: 1;
             font-weight: 800;
-            letter-spacing: -0.5px;
         }
 
         .bottom {
             display: flex;
-            align-items: flex-end;
+            align-items: center;
             justify-content: space-between;
-            margin-top: 35px;
+            gap: 8mm;
         }
 
         .permanent {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 2mm;
 
-            padding: 9px 13px;
+            padding: 2.5mm 3.5mm;
 
-            border: 1px solid rgba(214,179,106,0.4);
+            border: 0.3mm solid rgba(214,179,106,0.5);
             border-radius: 999px;
 
             color: #d6b36a;
-            font-size: 9px;
+
+            font-size: 2.2mm;
             font-weight: 900;
-            letter-spacing: 1.8px;
+            letter-spacing: 0.4mm;
         }
 
         .footer-text {
-            font-size: 8px;
+            font-size: 1.9mm;
             color: rgba(255,255,255,0.3);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
+            letter-spacing: 0.4mm;
         }
 
-        /* DIVIDER */
+        /* QR-GEDEELTE */
 
-        .divider {
-            position: absolute;
-            right: 285px;
-            top: 22px;
-            bottom: 22px;
-            width: 1px;
-            border-left: 1px dashed rgba(255,255,255,0.16);
+        .front-side {
+            background:
+                linear-gradient(
+                    160deg,
+                    #e8dec8,
+                    #d4c199
+                );
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            padding: 7mm;
+
+            color: #111;
         }
 
-        .divider::before,
-        .divider::after {
-            content: "";
+        .qr-label {
+            font-size: 2.2mm;
+            font-weight: 900;
+            letter-spacing: 0.6mm;
 
-            position: absolute;
-            width: 25px;
-            height: 25px;
+            margin-bottom: 3mm;
 
-            background: #111;
-            border: 1px solid rgba(214,179,106,0.20);
-            border-radius: 50%;
-
-            left: -14px;
+            color: rgba(17,17,17,0.6);
+            text-align: center;
         }
 
-        .divider::before {
-            top: -13px;
+        .qr {
+            padding: 3mm;
+            background: white;
+            border-radius: 3mm;
+
+            box-shadow:
+                0 2mm 5mm rgba(0,0,0,0.12);
         }
 
-        .divider::after {
-            bottom: -13px;
+        .qr img {
+            display: block;
+            width: 37mm !important;
+            height: 37mm !important;
         }
 
-        /* QR SIDE */
+        .scan-title {
+            margin-top: 4mm;
 
-        .pass-side {
+            font-size: 2.7mm;
+            font-weight: 900;
+            letter-spacing: 0.4mm;
+
+            text-align: center;
+        }
+
+        .scan-text {
+            margin-top: 2mm;
+
+            max-width: 38mm;
+
+            font-size: 2.1mm;
+            line-height: 1.45;
+
+            color: rgba(17,17,17,0.55);
+            text-align: center;
+        }
+
+        /* =========================
+           ACHTERKANT
+           ========================= */
+
+        .back-pass {
+            width: 100%;
+            height: 100%;
+
             position: relative;
+            overflow: hidden;
+
+            border-radius: 6mm;
+
+            border: 0.4mm solid rgba(214,179,106,0.5);
+
+            background:
+                radial-gradient(
+                    circle at 80% 20%,
+                    rgba(214,179,106,0.12),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    145deg,
+                    #181818,
+                    #080808
+                );
 
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
 
-            padding: 30px;
-
-            background:
-                linear-gradient(
-                    160deg,
-                    #e7dcc2 0%,
-                    #d5c29a 100%
-                );
-
-            color: #111;
+            text-align: center;
         }
 
-        .qr-label {
-            font-size: 9px;
-            font-weight: 900;
-            letter-spacing: 2.5px;
-            margin-bottom: 16px;
-            color: rgba(17,17,17,0.65);
-        }
+        .back-pass::before {
+            content: "";
 
-        .qr {
-            padding: 13px;
-            background: #fff;
-            border-radius: 15px;
+            position: absolute;
+
+            width: 100mm;
+            height: 100mm;
+
+            border-radius: 50%;
+
+            border: 0.3mm solid rgba(214,179,106,0.07);
 
             box-shadow:
-                0 10px 25px rgba(0,0,0,0.16);
+                0 0 0 12mm rgba(214,179,106,0.025),
+                0 0 0 24mm rgba(214,179,106,0.015);
         }
 
-        .qr img {
-            display: block;
-        }
+        .back-brand {
+            position: relative;
 
-        .scan-title {
-            margin-top: 18px;
+            color: #d6b36a;
 
-            font-size: 12px;
+            font-size: 3.2mm;
             font-weight: 900;
-            text-align: center;
-            letter-spacing: 1.3px;
+            letter-spacing: 1.2mm;
+
+            margin-bottom: 9mm;
         }
 
-        .scan-text {
-            max-width: 190px;
-            margin-top: 8px;
+        .back-title {
+            position: relative;
 
-            font-size: 9px;
-            line-height: 1.5;
-            text-align: center;
+            margin: 0;
 
-            color: rgba(17,17,17,0.58);
-        }
-
-        .qr-footer {
-            position: absolute;
-            bottom: 19px;
-            left: 0;
-            right: 0;
-
-            text-align: center;
-
-            font-size: 7px;
+            font-size: 11mm;
+            line-height: 0.9;
             font-weight: 900;
-            letter-spacing: 2px;
-
-            color: rgba(17,17,17,0.35);
+            letter-spacing: -0.4mm;
         }
+
+        .back-title span {
+            color: #d6b36a;
+        }
+
+        .back-tagline {
+            position: relative;
+
+            margin-top: 6mm;
+
+            font-size: 3.2mm;
+            font-weight: 800;
+            letter-spacing: 0.8mm;
+
+            color: rgba(255,255,255,0.85);
+        }
+
+        .back-description {
+            position: relative;
+
+            max-width: 95mm;
+
+            margin-top: 5mm;
+
+            color: rgba(255,255,255,0.45);
+
+            font-size: 2.5mm;
+            line-height: 1.6;
+        }
+
+        .back-line {
+            position: relative;
+
+            width: 50mm;
+            height: 0.3mm;
+
+            background: #d6b36a;
+
+            margin: 7mm 0;
+        }
+
+        .back-footer {
+            position: relative;
+
+            color: rgba(255,255,255,0.3);
+
+            font-size: 2mm;
+            font-weight: 800;
+            letter-spacing: 0.6mm;
+        }
+
+        /* =========================
+           FOUT
+           ========================= */
 
         .error {
-            color: #ff6969;
+            color: red;
+            padding: 40px;
             text-align: center;
-            padding: 50px;
         }
 
-        /* MOBILE */
+        /* =========================
+           PRINT
+           ========================= */
 
-        @media (max-width: 720px) {
+        @media print {
 
-            .pass {
-                grid-template-columns: 1fr;
+            @page {
+                size: A4 portrait;
+                margin: 0;
             }
 
-            .divider {
-                display: none;
+            body {
+                background: white;
             }
 
-            .pass-side {
-                min-height: 300px;
+            .controls {
+                display: none !important;
             }
 
-            .pass-title {
-                font-size: 45px;
+            #printArea {
+                padding: 0;
             }
 
-            .bottom {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 18px;
+            .sheet {
+                width: 210mm;
+                height: 297mm;
+
+                margin: 0;
+
+                break-after: page;
+                page-break-after: always;
+            }
+
+            .sheet:last-child {
+                break-after: auto;
+                page-break-after: auto;
+            }
+
+            .front-pass,
+            .back-pass {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
         }
-
-        /* PRINT */
-
-      @media print {
-
-    @page {
-        size: A4;
-        margin: 10mm;
-    }
-
-    body {
-        background: white;
-    }
-
-    .controls {
-        display: none;
-    }
-
-    #tickets {
-        padding: 0;
-    }
-
-    .pass {
-        width: 100%;
-        max-width: none;
-        min-height: 350px;
-
-        margin: 0 auto 12mm;
-
-        box-shadow: none;
-
-        break-inside: avoid;
-        page-break-inside: avoid;
-
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
-}
     </style>
 </head>
 
 <body>
 
-    <div class="controls">
-        <button class="print-button" onclick="window.print()">
-            🖨 Print alle Filmavond Passes
-        </button>
-    </div>
+<div class="controls">
 
-    <div id="tickets">
-        Laden...
-    </div>
+    <button
+        class="print-button"
+        onclick="window.print()"
+    >
+        🖨 Print Filmavond Passes
+    </button>
 
-    <script>
+</div>
 
-const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co/";
+
+<div id="printArea">
+    Laden...
+</div>
+
+
+<script>
+
+    /*
+     * Gebruik exact dezelfde gegevens
+     * als in je werkende index.html
+     */
+
+    const SUPABASE_URL = "https://vmkhgifrvwngoexfkdgt.supabase.co/";
     const SUPABASE_KEY = "sb_publishable_5s3medx06EcIGSfqZAsvfA_BjQBYvDS";
-
-        const websiteURL = "https://472hjmvsmg-png.github.io/Filmavond-tickets/";
 
         const supabaseClient = supabase.createClient(
             SUPABASE_URL,
             SUPABASE_KEY
         );
 
-        async function loadTickets() {
+        const websiteURL = "https://472hjmvsmg-png.github.io/Filmavond-tickets/";
 
-            const container = document.getElementById("tickets");
 
-            const { data: tickets, error } =
-                await supabaseClient
-                    .from("tickets")
-                    .select("id, name, token")
-                    .order("id", { ascending: true });
+    const supabaseClient =
+        supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
 
-            if (error) {
-                container.innerHTML =
-                    `<div class="error">Fout bij laden: ${error.message}</div>`;
-                return;
-            }
 
-            container.innerHTML = "";
+    async function loadTickets() {
 
-            tickets.forEach(function(ticket) {
+        const printArea =
+            document.getElementById("printArea");
+
+
+        const {
+            data: tickets,
+            error
+        } =
+            await supabaseClient
+                .from("tickets")
+                .select("id, name, token")
+                .order("id", {
+                    ascending: true
+                });
+
+
+        if (error) {
+
+            printArea.innerHTML = `
+                <div class="error">
+                    Fout: ${error.message}
+                </div>
+            `;
+
+            return;
+        }
+
+
+        printArea.innerHTML = "";
+
+
+        /*
+         * Twee personen per A4.
+         */
+
+        for (
+            let i = 0;
+            i < tickets.length;
+            i += 2
+        ) {
+
+            const group =
+                tickets.slice(i, i + 2);
+
+
+            /*
+             * =====================
+             * VOORKANT
+             * =====================
+             */
+
+            const frontSheet =
+                document.createElement("div");
+
+            frontSheet.className =
+                "sheet";
+
+
+            group.forEach(function(ticket) {
+
+                const slot =
+                    document.createElement("div");
+
+                slot.className =
+                    "slot";
+
+
+                const front =
+                    document.createElement("div");
+
+                front.className =
+                    "front-pass";
+
 
                 const ticketURL =
-                    websiteURL + "?token=" +
-                    encodeURIComponent(ticket.token);
+                    websiteURL +
+                    "?token=" +
+                    encodeURIComponent(
+                        ticket.token
+                    );
 
-                const pass = document.createElement("div");
-                pass.className = "pass";
 
-                const main = document.createElement("div");
-                main.className = "pass-main";
+                front.innerHTML = `
 
-                main.innerHTML = `
-                    <div>
-                        <div class="top">
+                    <div class="front-main">
+
+                        <div>
 
                             <div class="brand">
                                 FILMAVOND
                             </div>
 
-                            <div class="small-number">
-                                PASS #${String(ticket.id).padStart(3, "0")}
-                            </div>
-
-                        </div>
-
-                        <div class="hero">
 
                             <div class="eyebrow">
                                 PERSOONLIJKE TOEGANG
                             </div>
 
+
                             <h1 class="pass-title">
+
                                 FILMAVOND<br>
-                                <span>PASS</span>
+
+                                <span>
+                                    PASS
+                                </span>
+
                             </h1>
 
-                        </div>
 
-                        <div class="name-block">
+                            <div class="name-block">
 
-                            <div class="name-label">
-                                UITGEREIKT AAN
+                                <div class="name-label">
+                                    UITGEREIKT AAN
+                                </div>
+
+
+                                <div class="name">
+                                    ${ticket.name}
+                                </div>
+
                             </div>
 
-                            <div class="name">
-                                ${ticket.name}
+                        </div>
+
+
+                        <div class="bottom">
+
+                            <div class="permanent">
+                                ✦ PERMANENTE PASS
+                            </div>
+
+
+                            <div class="footer-text">
+                                PERSOONLIJK • NIET DELEN
                             </div>
 
                         </div>
-                    </div>
-
-                    <div class="bottom">
-
-                        <div class="permanent">
-                            <span>✦</span>
-                            PERMANENTE PASS
-                        </div>
-
-                        <div class="footer-text">
-                            Persoonlijk • Niet delen
-                        </div>
 
                     </div>
+
+
+                    <div class="front-side">
+
+                        <div class="qr-label">
+                            JOUW PERSOONLIJKE QR
+                        </div>
+
+
+                        <div class="qr"></div>
+
+
+                        <div class="scan-title">
+                            SCAN VOOR DE ACTUELE FILMAVOND
+                        </div>
+
+
+                        <div class="scan-text">
+                            Bekijk de actuele film,
+                            datum, tijd en informatie online.
+                        </div>
+
+                    </div>
+
                 `;
 
-                const divider = document.createElement("div");
-                divider.className = "divider";
 
-                const side = document.createElement("div");
-                side.className = "pass-side";
+                /*
+                 * QR-code
+                 */
 
-                const qrLabel = document.createElement("div");
-                qrLabel.className = "qr-label";
-                qrLabel.textContent = "JOUW PERSOONLIJKE QR";
+                const qrContainer =
+                    front.querySelector(".qr");
 
-                const qr = document.createElement("div");
-                qr.className = "qr";
 
-                new QRCode(qr, {
-                    text: ticketURL,
-                    width: 175,
-                    height: 175,
-                    correctLevel: QRCode.CorrectLevel.H
-                });
+                new QRCode(
+                    qrContainer,
+                    {
+                        text: ticketURL,
 
-                const scanTitle = document.createElement("div");
-                scanTitle.className = "scan-title";
-                scanTitle.textContent =
-                    "SCAN VOOR DE ACTUELE FILMAVOND";
+                        width: 175,
+                        height: 175,
 
-                const scanText = document.createElement("div");
-                scanText.className = "scan-text";
-                scanText.textContent =
-                    "Bekijk de actuele film, datum, tijd en alle informatie online.";
+                        correctLevel:
+                            QRCode.CorrectLevel.H
+                    }
+                );
 
-                const qrFooter = document.createElement("div");
-                qrFooter.className = "qr-footer";
-                qrFooter.textContent = "FILMAVOND • OFFICIËLE PASS";
 
-                side.appendChild(qrLabel);
-                side.appendChild(qr);
-                side.appendChild(scanTitle);
-                side.appendChild(scanText);
-                side.appendChild(qrFooter);
+                /*
+                 * Ticketnummer
+                 */
 
-                pass.appendChild(main);
-                pass.appendChild(divider);
-                pass.appendChild(side);
+                const number =
+                    document.createElement("div");
 
-                container.appendChild(pass);
+                number.className =
+                    "small-number";
+
+                number.textContent =
+                    "PASS #" +
+                    String(ticket.id)
+                        .padStart(3, "0");
+
+
+                front.appendChild(number);
+
+
+                slot.appendChild(front);
+
+                frontSheet.appendChild(slot);
+
             });
+
+
+            /*
+             * Als er één persoon overblijft,
+             * blijft de tweede helft leeg.
+             */
+
+            while (
+                frontSheet.children.length < 2
+            ) {
+
+                const emptySlot =
+                    document.createElement(
+                        "div"
+                    );
+
+                emptySlot.className =
+                    "slot";
+
+                frontSheet.appendChild(
+                    emptySlot
+                );
+            }
+
+
+            printArea.appendChild(
+                frontSheet
+            );
+
+
+            /*
+             * =====================
+             * ACHTERKANT
+             * =====================
+             */
+
+            const backSheet =
+                document.createElement("div");
+
+            backSheet.className =
+                "sheet";
+
+
+            group.forEach(function() {
+
+                const slot =
+                    document.createElement("div");
+
+                slot.className =
+                    "slot";
+
+
+                const back =
+                    document.createElement("div");
+
+                back.className =
+                    "back-pass";
+
+
+                back.innerHTML = `
+
+                    <div class="back-brand">
+                        🎬 FILMAVOND
+                    </div>
+
+
+                    <h2 class="back-title">
+
+                        YOUR NIGHT.<br>
+
+                        <span>
+                            YOUR MOVIE.
+                        </span>
+
+                    </h2>
+
+
+                    <div class="back-tagline">
+                        YOUR PERMANENT PASS.
+                    </div>
+
+
+                    <div class="back-description">
+
+                        Deze persoonlijke
+                        Filmavond Pass blijft
+                        geldig voor toekomstige
+                        filmavonden.
+
+                        Scan de QR-code op de
+                        voorkant om altijd de
+                        actuele filmavond te
+                        bekijken.
+
+                    </div>
+
+
+                    <div class="back-line"></div>
+
+
+                    <div class="back-footer">
+                        FILMAVOND • EST. 2026
+                    </div>
+
+                `;
+
+
+                slot.appendChild(back);
+
+                backSheet.appendChild(slot);
+
+            });
+
+
+            /*
+             * Tweede helft leegmaken
+             * wanneer er slechts één
+             * ticket in de groep zit.
+             */
+
+            while (
+                backSheet.children.length < 2
+            ) {
+
+                const emptySlot =
+                    document.createElement(
+                        "div"
+                    );
+
+                emptySlot.className =
+                    "slot";
+
+                backSheet.appendChild(
+                    emptySlot
+                );
+            }
+
+
+            printArea.appendChild(
+                backSheet
+            );
         }
+    }
 
-        loadTickets();
 
-    </script>
+    loadTickets();
+
+</script>
 
 </body>
 </html>
