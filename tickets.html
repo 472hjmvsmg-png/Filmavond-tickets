@@ -349,42 +349,41 @@
 
         /* PRINT */
 
-        @media print {
+      @media print {
 
-            @page {
-                size: A4;
-                margin: 10mm;
-            }
+    @page {
+        size: A4;
+        margin: 10mm;
+    }
 
-            body {
-                background: white;
-            }
+    body {
+        background: white;
+    }
 
-            .controls {
-                display: none;
-            }
+    .controls {
+        display: none;
+    }
 
-            #tickets {
-                padding: 0;
-            }
+    #tickets {
+        padding: 0;
+    }
 
-            .pass {
-                width: 100%;
-                max-width: none;
-                min-height: 350px;
+    .pass {
+        width: 100%;
+        max-width: none;
+        min-height: 350px;
 
-                margin: 0 auto 12mm;
+        margin: 0 auto 12mm;
 
-                box-shadow:
-                    none;
+        box-shadow: none;
 
-                break-inside: avoid;
-                page-break-inside: avoid;
+        break-inside: avoid;
+        page-break-inside: avoid;
 
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-        }
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
     </style>
 </head>
 
